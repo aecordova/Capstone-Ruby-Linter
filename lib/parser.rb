@@ -58,27 +58,37 @@ class Buffer
   def get_file_content(file_path)
     content=''
     File.open(file_path, 'r') { |f| content = f.readlines.map(&:chomp) }
-    content
+    content_scan = content.map{|v| v=StringScanner.new(v)}
+    content_scan
   end
 end
 
 class Parser
+  attr_accessor :content_s, :keywords, :blocks
 
-  attr_accessor :buffer, :name, :blocks
-  
-  def initialize (buffer, name)
-    self.buffer = buffer
-    self.blocks = build_blocks
-    self.name = name
+  def initialize (content_s, keywords)
+    self.content_s = content_s
+    @keywords = keywords
+    self.blocks = build_blocks(content_s, keywords)
   end
 
-  def build_blocks (buffer,name)
-    blocks = Hash.new
-    
-    name == buffer.line_get_word
-   
-  end
+  def build_blocks (cs,kw)
+    blocks = []
+    level,id = 0
+    cs.each_with_index do |s, i|
+      added = false
+      kw.each do |k|
+        next unless s.exist?(Regexp.new(k))
 
+        blocks.push([i+1,level,s])
+        added = true 
+        level += 1
+      end
+      level -= 1 if s.exist?(/}/) && level.positive?
+      blocks.push([i+1, level, s]) unless added
+    end
+    blocks
+  end
 end
 
 
