@@ -8,11 +8,11 @@ div {
   font-size: 18pt; 
 }
 p {
-   font-family: Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 @media (max-width: 600px) {
   .facet_sidebar {
-  display: none;
+    display: none;
   }
 }
