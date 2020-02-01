@@ -1,17 +1,18 @@
 a {
-color: #111111; 
+  color: #111111; 
   font-size: 16pt; 
 }
 
 div {
-    color: #222222; 
-    font-size: 18pt; 
+  color: #222222; 
+  font-size: 18pt; 
 }
-p {font-family: Helvetica, Arial, sans-serif;
+p {
+   font-family: Helvetica, Arial, sans-serif;
 }
 
 @media (max-width: 600px) {
   .facet_sidebar {
-    display: none;
+  display: none;
   }
 }
