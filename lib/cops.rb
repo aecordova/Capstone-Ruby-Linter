@@ -17,14 +17,25 @@ module Cops
     l = 0
     parsed_file.blocks.each do |x|
       line, s = x[0], x[2]
-      spc_check_before(line, s, '{')
-      spc_check_before(line, s, '\(')
-      spc_check_after(line, s, '\)')
-      spc_check_after(line, s, ',')
-      spc_check_after(line, s, ':')
+      # spc_check_before(line, s, '{')
+      # spc_check_before(line, s, '\(')
+      # spc_check_after(line, s, '\)')
+      # spc_check_after(line, s, ',')
+      # spc_check_after(line, s, ':')
     end
   end
-  
+
+  def line_format_cop (parsed_file)
+    l = 0
+    parsed_file.blocks.each do |x|
+      line, s = x[0], x[2]
+      check_ret_after(line, s, '{')
+      check_ret_after(line, s, '}')
+      check_ret_after(line, s, ';')
+      
+    end
+  end
+
   def spc_check_before(line, str, char)
     str.reset
     s = str.scan_until(Regexp.new(char))
@@ -47,6 +58,15 @@ module Cops
     end
   end
 
+  def check_ret_after(line, str, char)
+    str.reset
+    str.scan_until(Regexp.new(char))
+    while str.matched?
+      log_error(4, line, char, str.pos) unless str.eos?
+      str.scan_until(Regexp.new(char))
+    end
+  end
+
   def log_error(type, line, char = nil, pos = nil)
     err_string = "Error: line #{line}"
     err_string += ", col: #{pos}" unless pos.nil?
@@ -54,11 +74,13 @@ module Cops
     when 1
       puts "#{err_string}, Wrong Indentation "
     when 2
-      puts "#{err_string}, Wrong spacing after '#{char}' "
+      puts "#{err_string}, Spacing, expected single space after '#{char}' "
     when 3
-      puts "#{err_string}, Wrong spacing before '#{char}' "
+      puts "#{err_string}, Spacing, expected single space before '#{char}' "
+    when 4
+      puts "#{err_string}, Line Format, Expected line break after '#{char}' "
     else
-      puts "Other"
+      puts "#{err_string}, Other"
     end
   end
 end

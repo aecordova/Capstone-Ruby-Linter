@@ -12,6 +12,6 @@ kw = ['{']
 b = Buffer.new(file_path)
 parsed_file = Parser.new(b.content,kw)
 
-
+line_format_cop (parsed_file)
 spacing_cop(parsed_file)
 indent_cop(parsed_file)
