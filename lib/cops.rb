@@ -16,19 +16,25 @@ module Cops
     l = 0
     parsed_file.blocks.each do |x|
       line, s = x[0], x[2]
-      s.scan_until(/:/)
-      next unless s.matched?
-
-      s.scan(/\s+/)
-      l = 0 if s.matched.nil?
-      l = s.matched.length unless s.matched.nil?
-      log_error(2,line,':') if l != 1
+      spc_check_after(line, s, '\)')
+      spc_check_after(line, s, ',')
+      spc_check_after(line, s, ':')
+    end
+  end
+  
+  def spc_check_after(line, str, char)
+    str.scan_until(Regexp.new(char))
+    while str.matched?
+      str.scan(/\s+/)
+      log_error(2, line, char, str.pos) if str.matched != ' '
+      str.scan_until(Regexp.new(char))
     end
   end
 
 
-  def log_error(type, line, char = nil)
-    err_string = "Error:line #{line}"
+  def log_error(type, line, char = nil,pos=nil)
+    err_string = "Error: line #{line}"
+    err_string +=", col: #{pos} " unless pos.nil?
     case type
     when 1
       puts "#{err_string}, Wrong Indentation "
