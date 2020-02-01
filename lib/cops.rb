@@ -32,8 +32,8 @@ module Cops
       check_ret_after(line, s, '{')
       check_ret_after(line, s, '}')
       check_ret_after(line, s, ';')
-      
     end
+    check_lines_bet_blocks(parsed_file.blocks)
   end
 
   def spc_check_before(line, str, char)
