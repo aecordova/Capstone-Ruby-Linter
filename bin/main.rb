@@ -1,18 +1,17 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative '../lib/parser.rb'
+require_relative '../lib/buffer.rb'
 require_relative '../lib/cops.rb'
 # rubocop: disable Style/MixinUsage
 include Cops
 
-
 file_path = ARGV.shift
-kw = ['{']
+k_open = '{'
+k_close = '}'
 b = Buffer.new(file_path)
-parsed_file = Parser.new(b.content_s, kw)
 
-line_format_cop(parsed_file)
-spacing_cop(parsed_file)
-indent_cop(parsed_file)
+line_format_cop(b.content_s)
+spacing_cop(b.content_s)
+indent_cop(b.content_s, k_open, k_close)
 # rubocop: enable Style/MixinUsage

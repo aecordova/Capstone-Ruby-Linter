@@ -5,40 +5,60 @@ require 'strscan'
 # This module contains all the revisions to be made to CSS files
 module Cops
   # rubocop: disable Metrics/AbcSize
-  def indent_cop(parsed_file)
-    parsed_file.blocks.each do |x|
-      x[2].reset
-      x[2].scan(/\s+/)
-      sp = if x[2].matched?
-             x[2].matched.length
+  def indent_cop(content_s, k_open, k_close)
+    lev = check_indent_level(content_s, k_open, k_close)
+    content_s.each_with_index do |s, i|
+      s.reset
+      s.scan(/\s+/)
+      sp = if s.matched?
+             s.matched.length
            else
              0
            end
-      log_error(1, x[0], nil, nil, x[1] * 2) unless sp == x[1] * 2
+      log_error(1, i, nil, nil, lev[i] * 2) unless sp == lev[i] * 2
     end
   end
 
-  def spacing_cop(parsed_file)
-    parsed_file.blocks.each do |x|
-      line = x[0]
-      s = x[2]
-      spc_check_before(line, s, '{')
-      spc_check_before(line, s, '\(')
-      spc_check_after(line, s, '\)')
-      spc_check_after(line, s, ',')
-      spc_check_after(line, s, ':')
+  def spacing_cop(content_s)
+    content_s.each_with_index do |s, i|
+      spc_check_before(i + 1, s, '{')
+      spc_check_before(i + 1, s, '\(')
+      spc_check_after(i + 1, s, '\)')
+      spc_check_after(i + 1, s, ',')
+      spc_check_after(i + 1, s, ':')
     end
   end
 
-  def line_format_cop(parsed_file)
-    parsed_file.blocks.each do |x|
-      line = x[0]
-      s = x[2]
-      check_ret_after(line, s, '{')
-      check_ret_after(line, s, '}')
-      check_ret_after(line, s, ';')
+  def line_format_cop(content_s)
+    content_s.each_with_index do |s, i|
+      check_ret_after(i + 1, s, '{')
+      check_ret_after(i + 1, s, '}')
+      check_ret_after(i + 1, s, ';')
     end
-    check_lines_bet_blocks(parsed_file.blocks, '}')
+    check_lines_bet_blocks(content_s, '}')
+  end
+
+  def check_indent_level(content_s, k_open, k_close)
+    levels = []
+    level = 0
+    content_s.each_with_index do |s, i|
+      s.reset
+      if s.exist?(Regexp.new(k_open))
+        levels << level
+        level += 1
+      else
+        levels << level
+      end 
+      if s.exist?(Regexp.new(k_close)) 
+        level -= 1
+        if level[i].nil? 
+          levels << level
+        else
+          levels[i] = level
+        end
+      end
+    end
+    levels
   end
 
   def spc_check_before(line, str, char)
@@ -73,20 +93,20 @@ module Cops
   end
 
   # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
-  def check_lines_bet_blocks(block, char)
+  def check_lines_bet_blocks(content_s, char)
     found = false
     counter = 0
-    0.upto(block.length - 1) do |i|
-      block[i][2].reset
-      if found && block[i][2].string == ''
+    0.upto(content_s.length - 1) do |i|
+      content_s[i].reset
+      if found && content_s[i].string == ''
         counter += 1
         log_error(5, i + 1, char) if counter > 1
-      elsif found && block[i][2].string != ''
-        log_error(5, i + 1, char) if counter.zero? && !block[i][2].exist?(/}/)
+      elsif found && content_s[i].string != ''
+        log_error(5, i + 1, char) if counter.zero? && !content_s[i].exist?(/}/)
       else
         found = false
       end
-      if block[i][2].exist?(/}/)
+      if content_s[i].exist?(/}/)
         found = true
         counter = 0
       end
