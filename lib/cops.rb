@@ -17,11 +17,11 @@ module Cops
     l = 0
     parsed_file.blocks.each do |x|
       line, s = x[0], x[2]
-      # spc_check_before(line, s, '{')
-      # spc_check_before(line, s, '\(')
-      # spc_check_after(line, s, '\)')
-      # spc_check_after(line, s, ',')
-      # spc_check_after(line, s, ':')
+      spc_check_before(line, s, '{')
+      spc_check_before(line, s, '\(')
+      spc_check_after(line, s, '\)')
+      spc_check_after(line, s, ',')
+      spc_check_after(line, s, ':')
     end
   end
 
@@ -33,7 +33,7 @@ module Cops
       check_ret_after(line, s, '}')
       check_ret_after(line, s, ';')
     end
-    check_lines_bet_blocks(parsed_file.blocks)
+    check_lines_bet_blocks(parsed_file.blocks, '}')
   end
 
   def spc_check_before(line, str, char)
@@ -67,6 +67,27 @@ module Cops
     end
   end
 
+  def check_lines_bet_blocks(b, char)
+    found = false
+    counter = 0
+    0.upto(b.length-1) do |i|
+      b[i][2].reset
+      if found && b[i][2].string == ''
+        counter+=1
+        log_error(5, i + 1,char) if counter > 1
+      elsif found && b[i][2].string != ''
+        log_error(5, i + 1,char) if counter.zero? && !b[i][2].exist?(/}/)
+      else
+        found = false
+      end
+      if b[i][2].exist?(/}/)
+        found = true
+        counter = 0
+      end
+    end
+  end
+  
+
   def log_error(type, line, char = nil, pos = nil)
     err_string = "Error: line #{line}"
     err_string += ", col: #{pos}" unless pos.nil?
@@ -79,6 +100,8 @@ module Cops
       puts "#{err_string}, Spacing, expected single space before '#{char}' "
     when 4
       puts "#{err_string}, Line Format, Expected line break after '#{char}' "
+    when 5
+      puts "#{err_string}, Line Format, Expected single empty line after '#{char}' "
     else
       puts "#{err_string}, Other"
     end
