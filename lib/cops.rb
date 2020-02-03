@@ -1,22 +1,27 @@
+# frozen_string_literal: true
 
+require 'strscan'
+
+# This module contains all the revisions to be made to CSS files
 module Cops
+  # rubocop: disable Metrics/AbcSize
   def indent_cop(parsed_file)
     parsed_file.blocks.each do |x|
       x[2].reset
-      sp = x[2].scan(/\s+/)
-      if sp.nil?
-        sp = 0
-      else
-        sp = sp.length
-      end 
-      log_error(1,x[0]) unless sp ==  x[1]*2
+      x[2].scan(/\s+/)
+      sp = if x[2].matched?
+             x[2].matched.length
+           else
+             0
+           end
+      log_error(1, x[0]) unless sp == x[1] * 2
     end
   end
 
   def spacing_cop(parsed_file)
-    l = 0
     parsed_file.blocks.each do |x|
-      line, s = x[0], x[2]
+      line = x[0]
+      s = x[2]
       spc_check_before(line, s, '{')
       spc_check_before(line, s, '\(')
       spc_check_after(line, s, '\)')
@@ -25,10 +30,10 @@ module Cops
     end
   end
 
-  def line_format_cop (parsed_file)
-    l = 0
+  def line_format_cop(parsed_file)
     parsed_file.blocks.each do |x|
-      line, s = x[0], x[2]
+      line = x[0]
+      s = x[2]
       check_ret_after(line, s, '{')
       check_ret_after(line, s, '}')
       check_ret_after(line, s, ';')
@@ -43,7 +48,7 @@ module Cops
       s = StringScanner.new(s.reverse)
       s.skip(Regexp.new(char))
       s.scan(/\s+/)
-      log_error(3, line, char,s.string.length - s.pos) if s.matched != ' '
+      log_error(3, line, char, s.string.length - s.pos) if s.matched != ' '
       s = str.scan_until(Regexp.new(char))
     end
   end
@@ -67,26 +72,26 @@ module Cops
     end
   end
 
-  def check_lines_bet_blocks(b, char)
+  # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def check_lines_bet_blocks(block, char)
     found = false
     counter = 0
-    0.upto(b.length-1) do |i|
-      b[i][2].reset
-      if found && b[i][2].string == ''
-        counter+=1
-        log_error(5, i + 1,char) if counter > 1
-      elsif found && b[i][2].string != ''
-        log_error(5, i + 1,char) if counter.zero? && !b[i][2].exist?(/}/)
+    0.upto(block.length - 1) do |i|
+      block[i][2].reset
+      if found && block[i][2].string == ''
+        counter += 1
+        log_error(5, i + 1, char) if counter > 1
+      elsif found && block[i][2].string != ''
+        log_error(5, i + 1, char) if counter.zero? && !block[i][2].exist?(/}/)
       else
         found = false
       end
-      if b[i][2].exist?(/}/)
+      if block[i][2].exist?(/}/)
         found = true
         counter = 0
       end
     end
   end
-  
 
   def log_error(type, line, char = nil, pos = nil)
     err_string = "Error: line #{line}"
@@ -95,15 +100,16 @@ module Cops
     when 1
       puts "#{err_string}, Wrong Indentation "
     when 2
-      puts "#{err_string}, Spacing, expected single space after '#{char}' "
+      puts "#{err_string}, Spacing, expected single space after #{char}"
     when 3
-      puts "#{err_string}, Spacing, expected single space before '#{char}' "
+      puts "#{err_string}, Spacing, expected single space before #{char}"
     when 4
-      puts "#{err_string}, Line Format, Expected line break after '#{char}' "
+      puts "#{err_string}, Line Format, Expected line break after #{char}"
     when 5
-      puts "#{err_string}, Line Format, Expected single empty line after '#{char}' "
+      puts "#{err_string}, Line Format, Expected one empty line after #{char}"
     else
       puts "#{err_string}, Other"
     end
   end
 end
+# rubocop: enable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength

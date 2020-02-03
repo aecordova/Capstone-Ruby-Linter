@@ -3,8 +3,7 @@
 
 require_relative '../lib/parser.rb'
 require_relative '../lib/cops.rb'
-require 'strscan'
-
+# rubocop: disable Style/MixinUsage
 include Cops
 
 file_path = '../example'
@@ -12,10 +11,7 @@ kw = ['{']
 b = Buffer.new(file_path)
 parsed_file = Parser.new(b.content_s, kw)
 
-
 line_format_cop(parsed_file)
 spacing_cop(parsed_file)
 indent_cop(parsed_file)
-
-
-# check_lines_bet_blocks(parsed_file.blocks,'}')
+# rubocop: enable Style/MixinUsage
