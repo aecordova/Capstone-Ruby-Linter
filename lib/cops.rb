@@ -14,7 +14,7 @@ module Cops
            else
              0
            end
-      log_error(1, x[0]) unless sp == x[1] * 2
+      log_error(1, x[0], nil, nil, x[1] * 2) unless sp == x[1] * 2
     end
   end
 
@@ -93,12 +93,12 @@ module Cops
     end
   end
 
-  def log_error(type, line, char = nil, pos = nil)
+  def log_error(type, line, char = nil, pos = nil, lev = nil)
     err_string = "Error: line #{line}"
     err_string += ", col: #{pos}" unless pos.nil?
     case type
     when 1
-      puts "#{err_string}, Wrong Indentation "
+      puts "#{err_string}, Wrong Indentation, expected #{lev} spaces "
     when 2
       puts "#{err_string}, Spacing, expected single space after #{char}"
     when 3
@@ -110,6 +110,7 @@ module Cops
     else
       puts "#{err_string}, Other"
     end
+    type
   end
 end
 # rubocop: enable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength

@@ -6,7 +6,8 @@ require_relative '../lib/cops.rb'
 # rubocop: disable Style/MixinUsage
 include Cops
 
-file_path = '../example'
+
+file_path = ARGV.shift
 kw = ['{']
 b = Buffer.new(file_path)
 parsed_file = Parser.new(b.content_s, kw)
