@@ -91,6 +91,23 @@ h1, p {
     font-size: 16pt;
 }
 ```
+## ⭐️ How it works
+```
+The linter scans file line by line  looking for key characters,
+if a certain rule corresponding to each character is not  complied with, it prints an error.
+
+The error message will give you the line number and where applicable, the column it appears at
+
+These  are the possile erros you may encounter:
+ - Wrong Indentation, expected X spaces
+ - Spacing, expected single space before '{' and'('
+ - Spacing, expected single space after ')', ':' and ','
+ - Line Format, Expected line break after '{', '}' and ';'
+ - Line Format, Expected one empty line after '}'
+
+*Go to Instructions section for an example
+```
+
 
 ## Built with
 <ul>
