@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'strscan'
+# rubocop: disable Metrics/AbcSize, Metrics/ModuleLength,Metrics/MethodLength
 
 # This module contains all the revisions to be made to CSS files
 module Cops
-  # rubocop: disable Metrics/AbcSize
   def indent_cop(content_s, k_open, k_close)
     lev = check_indent_level(content_s, k_open, k_close)
     content_s.each_with_index do |s, i|
@@ -15,7 +15,7 @@ module Cops
            else
              0
            end
-      log_error(1, i, nil, nil, lev[i] * 2) unless sp == lev[i] * 2
+      log_error(1, i + 1, nil, nil, lev[i] * 2) unless sp == lev[i] * 2
     end
   end
 
@@ -43,20 +43,12 @@ module Cops
     level = 0
     content_s.each_with_index do |s, i|
       s.reset
-      if s.exist?(Regexp.new(k_open))
-        levels << level
-        level += 1
-      else
-        levels << level
-      end 
-      if s.exist?(Regexp.new(k_close)) 
-        level -= 1
-        if level[i].nil? 
-          levels << level
-        else
-          levels[i] = level
-        end
-      end
+      levels << level
+      level += 1 if s.exist?(Regexp.new(k_open))
+      next unless s.exist?(Regexp.new(k_close))
+
+      level -= 1
+      levels[i] = level
     end
     levels
   end
@@ -92,7 +84,7 @@ module Cops
     end
   end
 
-  # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  # rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
   def check_lines_bet_blocks(content_s, char)
     found = false
     counter = 0
@@ -133,4 +125,4 @@ module Cops
     type
   end
 end
-# rubocop: enable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
+# rubocop: enable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ModuleLength
