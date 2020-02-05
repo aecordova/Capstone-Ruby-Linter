@@ -9,21 +9,24 @@
   </a>
 </p>
 
-
+___
 ## Description of the project 
 
->The purpose of this project is to create a basic Linter that can  detect errors on spacing, indentation and line format.
-><br>In this case I chose CSS as the language to inspect. 
-><br>Style checks are based on an unnoficial style guide provided by Paul G Allen School, you can visit the link here: [CSE 154 — Unofficial Style Guide
+The purpose of this project is to create a basic Linter that can  detect errors on spacing, indentation and line format.
+
+In this case I chose **CSS** as the language to inspect. 
+
+Style checks are based on an unnoficial style guide provided by Paul G Allen School, you can visit the link here: [CSE 154 — Unofficial Style Guide
 ](https://courses.cs.washington.edu/courses/cse154/17au/styleguide/html-css/spacing-indentation-css.html#indentation)
+___
 
-<br><h3 align="center">Style Rules</h3>
+<h3 align="center">Style Rules</h3>
+
 **Indentation:** 
-<br><li> 2 space indentation or 'soft tabs' for each level
+* 2 space indentation or 'soft tabs' for each level
 
-```
-bad code :(
-
+bad code:
+```css
 div {
  font-size: 18pt;
   color: #222222;
@@ -32,9 +35,10 @@ div {
   img {
 width: 50%;
   }
+```
 
 good code:
-
+```css
 div {
   font-size: 18pt;
   color: #222222;
@@ -44,21 +48,23 @@ img {
   width: 50%;
 }
 ```
-**Line Format:** 
-<br><li>Just one line per rule
-<br><li>Place an empty line between blocks 
-```
-bad code :(
 
+**Line Format:**
+* Just ine line per rule
+* Place an empty line between blocks
+
+bad code:
+```css
 a { color: #111111;
     font-size: 16pt;
 }
 div {
   color: #222222; font-size: 18pt;
 }
+```
 
-good code
-
+good code:
+```css
 a {
   color: #111111; 
   font-size: 16pt; 
@@ -69,18 +75,22 @@ div {
   font-size: 18pt; 
 }
 ```
-**Spacing:**
-<br><li>Line break after a { or }, and between each property declaration.
-<br><li>Spaces between selectors and { } 
-<br><li>Space after a colon or a comma. 
-```
-bad code :(
 
+**Spacing:**
+* Line break after { or } and between each property declaration.
+* Spaces between selectors and { } 
+* Space after a colon or a comma. 
+
+bad code:
+
+```css
 p,h1{color:red; font-family:serif; font-size:16pt;}
 a {text-decoration:none}
+```
 
-good code
+good code:
 
+```css
 a {
     text-decoration: none;
 }
@@ -91,8 +101,8 @@ h1, p {
     font-size: 16pt;
 }
 ```
-## ⭐️ How it works
-```
+### ⭐️ How it works
+
 The linter scans file line by line  looking for key characters,
 if a certain rule corresponding to each character is not  complied with, it prints an error.
 
@@ -106,36 +116,53 @@ These  are the possile erros you may encounter:
  - Line Format, Expected one empty line after '}'
 
 *Go to Instructions section for an example
-```
+
+### ⭐️ Built with
+* Ruby
 
 
-## Built with
-<ul>
-  <li>Ruby</li>
-</ul>
+### Dev Environment Requirements:
+* Ruby needs to be installed to run the code check [here](https://www.ruby-lang.org/en/documentation/installation/) for further steps
 
-## Dev Environment Requirement:
-Ruby needs to be installed to run the code check [here](https://www.ruby-lang.org/en/documentation/installation/) for further steps
+### ⭐️ Running the code
 
-## ⭐️ Running the code
-```
-Inside The project Repository run the following command in the "Command line":
-> bin/main.rb
-```
-## ⭐️ Instructions
+#### Instructions:
 
 1. Clone the repo
-2. Navigate to the bin folder and run 
-```
-$ ruby main.rb [path-to-file]
 
-for example:
+2. Navigate to the project's root folder and run: 
+    ```
+    $ /bin/css_linter [path-to-file]
+    ```
+    for example:
+    ```
+    > $ ./bin/css_linter example.css
+    ```
+    <i>Note:</i> The file should have executable     permissions:
+    ```
+    > $ chmod +x bin/css_linter 
+    ```
+    Or you can run it using the ***ruby***     command:
+    ```
+    > $ ruby bin/css_linter example.css
+    ```
+3. Program will scan the file and show you the errors 
 
-    $ ruby main.rb ../example.css
-```
-2. Program will scan the file and show you the errors 
+    ![Screenshot](linter_shot.png)
 
-![Screenshot](linter_shot.png)
+### ⭐️ Testing with RSpec
+#### Instructions:
+1. Navigate to the spec folder
+    ```
+    > $ cd spec
+    ```
+2.  Run the following command:
+    ```
+    $ rspec cops_spec.rb
+    ```
+    Output:
+    ![rspec_output](rspec_o.png)
+    
 
 <!-- CONTRIBUTING -->
 ## Contributing
