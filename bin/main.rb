@@ -14,4 +14,5 @@ b = Buffer.new(file_path)
 line_format_cop(b.content_s)
 spacing_cop(b.content_s)
 indent_cop(b.content_s, k_open, k_close)
+
 # rubocop: enable Style/MixinUsage

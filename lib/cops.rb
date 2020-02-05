@@ -95,6 +95,7 @@ module Cops
         log_error(5, i + 1, char) if counter > 1
       elsif found && content_s[i].string != ''
         log_error(5, i + 1, char) if counter.zero? && !content_s[i].exist?(/}/)
+        found = false
       else
         found = false
       end
