@@ -3,7 +3,7 @@
 require 'strscan'
 # rubocop: disable Metrics/AbcSize, Metrics/ModuleLength,Metrics/MethodLength
 
-# This module contains all the revisions to be made to CSS files
+# This module contains all the revisions to be made to CSS filesin a review
 module Cops
   def indent_cop(content_s, k_open, k_close)
     lev = check_indent_level(content_s, k_open, k_close)
@@ -109,21 +109,40 @@ module Cops
   def log_error(type, line, char = nil, pos = nil, lev = nil)
     err_string = "Error: line #{line}"
     err_string += ", col: #{pos}" unless pos.nil?
-    case type
-    when 1
-      puts "#{err_string}, Wrong Indentation, expected #{lev} spaces "
-    when 2
-      puts "#{err_string}, Spacing, expected single space after #{char}"
-    when 3
-      puts "#{err_string}, Spacing, expected single space before #{char}"
-    when 4
-      puts "#{err_string}, Line Format, Expected line break after #{char}"
-    when 5
-      puts "#{err_string}, Line Format, Expected one empty line after #{char}"
-    else
-      puts "#{err_string}, Other"
-    end
-    type
+    err_string += case type
+                  when 1
+                    ", Wrong Indentation, expected #{lev} spaces "
+                  when 2
+                    ", Spacing, expected single space after #{char}"
+                  when 3
+                    ", Spacing, expected single space before #{char}"
+                  when 4
+                    ", Line Format, Expected line break after #{char}"
+                  when 5
+                    ", Line Format, Expected one empty line after #{char}"
+                  else
+                    ', Other'
+                  end
+    pos = 0 if pos.nil?
+    @errors << [line, pos, err_string]
   end
 end
 # rubocop: enable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ModuleLength
+
+# This class creates an object with the results of the revision made to CSS file
+class Review
+  include Cops
+
+  attr_accessor :errors
+
+  def initialize(buffer)
+    self.errors = []
+    line_format_cop(buffer.content_s)
+    spacing_cop(buffer.content_s)
+    indent_cop(buffer.content_s, '{', '}')
+  end
+
+  def print_errors
+    errors.sort.each { |e| puts e[2] }
+  end
+end

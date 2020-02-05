@@ -1,0 +1,32 @@
+Error: line 14, col: 3, Line Format, Expected line break after {
+Error: line 19, col: 17, Line Format, Expected line break after ;
+Error: line 28, col: 17, Line Format, Expected line break after ;
+Error: line 29, col: 18, Line Format, Expected line break after ;
+Error: line 34, col: 17, Line Format, Expected line break after ;
+Error: line 35, col: 18, Line Format, Expected line break after ;
+Error: line 40, col: 5, Line Format, Expected line break after {
+Error: line 40, col: 15, Line Format, Expected line break after ;
+Error: line 40, col: 34, Line Format, Expected line break after ;
+Error: line 40, col: 50, Line Format, Expected line break after ;
+Error: line 41, col: 3, Line Format, Expected line break after {
+Error: line 14, Line Format, Expected one empty line after }
+Error: line 27, Line Format, Expected one empty line after }
+Error: line 32, Line Format, Expected one empty line after }
+Error: line 37, Line Format, Expected one empty line after }
+Error: line 23, col: 25, Spacing, expected single space after ,
+Error: line 24, col: 21, Spacing, expected single space after ,
+Error: line 40, col: 4, Spacing, expected single space before {
+Error: line 40, col: 2, Spacing, expected single space after ,
+Error: line 40, col: 11, Spacing, expected single space after :
+Error: line 40, col: 28, Spacing, expected single space after :
+Error: line 40, col: 45, Spacing, expected single space after :
+Error: line 41, col: 19, Spacing, expected single space after :
+Error: line 2, Wrong Indentation, expected 2 spaces 
+Error: line 6, Wrong Indentation, expected 0 spaces 
+Error: line 7, Wrong Indentation, expected 2 spaces 
+Error: line 8, Wrong Indentation, expected 0 spaces 
+Error: line 11, Wrong Indentation, expected 2 spaces 
+Error: line 12, Wrong Indentation, expected 2 spaces 
+Error: line 15, Wrong Indentation, expected 2 spaces 
+Error: line 24, Wrong Indentation, expected 2 spaces 
+Error: line 25, Wrong Indentation, expected 2 spaces 
